@@ -66,16 +66,14 @@ button:disabled {
   width: 100%;
 }
 .chat {
-  /* display: flex; */
-  display: grid;
-  grid-template-columns: 100%;
+  display: flex;
 }
 .chat__sidebar {
-  /* height: 100vh; */
-  height: 10vh;
+  height: 100vh;
+
   color: #fff;
   background: #282828;
-  /* width: 225px; */
+  width: 225px;
   overflow-y: scroll;
 }
 .chat__main {
