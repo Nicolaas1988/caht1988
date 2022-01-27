@@ -72,7 +72,7 @@ button:disabled {
   height: 100vh;
 
   color: #fff;
-  background: brown;
+  background: blue;
   width: 225px;
   overflow-y: scroll;
 }
