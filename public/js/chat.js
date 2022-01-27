@@ -115,3 +115,7 @@ socket.emit("join", { username, room }, (error) => {
     location.href = "/";
   }
 });
+
+socket.on("testMessage", (message) => {
+  console.log(message);
+});
