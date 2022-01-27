@@ -117,6 +117,5 @@ socket.emit("join", { username, room }, (error) => {
 });
 
 socket.on("testMessage", (message) => {
-  const data = JSON.stringify(message);
-  console.log(`This is the message: ${data}`);
+  console.log(`This is the message: ${message.letters[1]}`);
 });
