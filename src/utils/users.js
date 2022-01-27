@@ -19,7 +19,43 @@ const addUser = ({ id, username, room }) => {
     };
   }
 
-  const user = { id, username, room, letters: ["a", "b", "c"] };
+  const user = {
+    id,
+    username,
+    room,
+    letters: [
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+      "_",
+    ],
+  };
+
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+  user.letters.forEach((l) => {
+    let index = Math.floor(Math.random() * 25);
+    let letter = alphabet.charAt(index);
+
+    l = letter;
+  });
+
   users.push(user);
   return { user };
 };
