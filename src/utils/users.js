@@ -49,12 +49,12 @@ const addUser = ({ id, username, room }) => {
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-  user.letters.forEach((l) => {
+  for (i = 0; i < user.letters.length - 1; i++) {
     let index = Math.floor(Math.random() * 25);
     let letter = alphabet.charAt(index);
 
-    l = letter;
-  });
+    user.letters[i] = letter;
+  }
 
   users.push(user);
   return { user };
