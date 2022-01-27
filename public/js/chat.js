@@ -117,5 +117,5 @@ socket.emit("join", { username, room }, (error) => {
 });
 
 socket.on("testMessage", (message) => {
-  console.log(`This be the message :): ${message.letters}`);
+  console.log(`the message :): ${message.letters}`);
 });

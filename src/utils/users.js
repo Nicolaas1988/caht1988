@@ -49,8 +49,8 @@ const addUser = ({ id, username, room }) => {
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-  for (i = 0; i < user.letters.length - 1; i++) {
-    let index = Math.floor(Math.random() * 25);
+  for (i = 0; i < user.letters.length; i++) {
+    let index = Math.floor(Math.random() * 26);
     let letter = alphabet.charAt(index);
 
     user.letters[i] = letter;
