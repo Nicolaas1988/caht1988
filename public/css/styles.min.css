@@ -71,8 +71,7 @@ button:disabled {
 .chat__sidebar {
   height: 100vh;
   color: #fff;
-  background: yellow;
-  width: 0%;
+  background: #282828;
   width: 225px;
   overflow-y: scroll;
 }
