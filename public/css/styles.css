@@ -1,6 +1,6 @@
 /* General Styles */
 
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -180,4 +180,5 @@ button:disabled {
   list-style-type: none;
   font-weight: 300;
   padding: 12px 24px 0 24px;
-}
+} */
+
