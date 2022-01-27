@@ -7,7 +7,7 @@
 }
 
 .hide {
-  display: none;
+  color: red !important;
 }
 
 html {
