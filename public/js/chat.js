@@ -118,5 +118,5 @@ socket.emit("join", { username, room }, (error) => {
 
 socket.on("testMessage", (message) => {
   console.log(message[0]);
-  console.log(`This is the callback: ${message[1]}`);
+  console.log(message[1]);
 });
