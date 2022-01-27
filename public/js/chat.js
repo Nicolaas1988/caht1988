@@ -62,6 +62,7 @@ socket.on("roomData", ({ room, users }) => {
   const html = Mustache.render(sidebarTemplate, {
     room,
     users,
+    test: "This is another test",
   });
   document.querySelector("#sidebar").innerHTML = html;
 });
