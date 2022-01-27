@@ -117,6 +117,6 @@ socket.emit("join", { username, room }, (error) => {
 });
 
 socket.on("testMessage", (message) => {
-  console.log(message[0]);
-  console.log(message[1]);
+  console.log(message);
+  console.log(message);
 });
