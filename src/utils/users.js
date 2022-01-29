@@ -94,6 +94,8 @@ const removeUser = (id, userRoom) => {
     delete playerTurns.room[`${userRoom}`];
   }
 
+  //
+
   const index = users.findIndex((user) => user.id === id);
 
   if (index !== -1) {
