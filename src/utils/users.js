@@ -1,4 +1,7 @@
 const users = [];
+const playerTurns = {
+  room: {},
+};
 
 const addUser = ({ id, username, room }) => {
   username = username.trim().toLowerCase();
@@ -23,6 +26,7 @@ const addUser = ({ id, username, room }) => {
     id,
     username,
     room,
+    test: "test",
     letters: [
       "_",
       "_",
@@ -57,10 +61,39 @@ const addUser = ({ id, username, room }) => {
   }
 
   users.push(user);
+
+  //Init playerturn on first round
+
+  if (!playerTurns.room.hasOwnProperty(`${user.room}`)) {
+    playerTurns.room[`${user.room}`] = {
+      players: [id],
+      turn: id,
+    };
+  } else {
+    let newPlayerArray = [...playerTurns.room[`${user.room}`].players, id];
+    playerTurns.room[`${user.room}`].players = newPlayerArray;
+  }
+
   return { user };
 };
 
-const removeUser = (id) => {
+const getPlayerTurn = () => {
+  return playerTurns;
+};
+
+const removeUser = (id, userRoom) => {
+  const playerTurnIndex = playerTurns.room[`${userRoom}`].players.indexOf(id);
+
+  if (playerTurnIndex !== -1) {
+    playerTurns.room[`${userRoom}`].players.splice(playerTurnIndex, 1);
+  }
+
+  //Reinitialize room to default if all users left
+
+  if (playerTurns.room[`${userRoom}`].players.length === 0) {
+    delete playerTurns.room[`${userRoom}`];
+  }
+
   const index = users.findIndex((user) => user.id === id);
 
   if (index !== -1) {
@@ -81,5 +114,6 @@ module.exports = {
   addUser,
   removeUser,
   getUser,
+  getPlayerTurn,
   getUsersInRoom,
 };

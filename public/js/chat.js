@@ -65,7 +65,12 @@ socket.on("roomData", ({ room, users }) => {
     test: "This is another test",
   });
   document.querySelector("#sidebar").innerHTML = html;
+
+  let myJSON2 = JSON.stringify(users); ///test
+  console.log(`Room: ${room}, users: ${myJSON2} `); ///test
 });
+
+socket.on("playerTurn", (data) => console.log(data));
 
 $messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -114,9 +119,4 @@ socket.emit("join", { username, room }, (error) => {
     alert(error);
     location.href = "/";
   }
-});
-
-socket.on("testMessage", (message) => {
-  myJSON = JSON.stringify(message);
-  console.log(`Player Object: ${myJSON}`);
 });

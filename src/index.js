@@ -12,6 +12,7 @@ const {
   removeUser,
   getUser,
   getUsersInRoom,
+  getPlayerTurn,
 } = require("./utils/users");
 
 const app = express();
@@ -36,7 +37,13 @@ io.on("connection", (socket) => {
     socket.join(user.room);
 
     socket.emit("message", generateMessage("Admin", "Welcome!"));
-    socket.emit("testMessage", user); /// remove this
+
+    ///
+
+    const playerT = getPlayerTurn();
+    io.to(user.room).emit("playerTurn", playerT);
+
+    ///
 
     socket.broadcast
       .to(user.room)
@@ -44,6 +51,7 @@ io.on("connection", (socket) => {
         "message",
         generateMessage("Admin", `${user.username} has joined!`)
       );
+
     io.to(user.room).emit("roomData", {
       room: user.room,
       users: getUsersInRoom(user.room),
@@ -77,7 +85,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    const user = removeUser(socket.id);
+    const room = getUser(socket.id).room;
+    const user = removeUser(socket.id, room);
 
     if (user) {
       io.to(user.room).emit(
