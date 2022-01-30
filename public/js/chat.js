@@ -27,7 +27,7 @@ socket.on("generateNewPlayerSection", (users) => {
       `
     <div class="card">
       <div class="player-section" id="player-${users[i].id}-section">
-          <div class="name-container"> ${username}</div>
+          <div class="name-container"> ${users[i].username}</div>
           <div class="letter-section" id="player-${users[i].id}-letters"> 
             <p id="player-${users[i].id}-letter-1"> ${users[i].letters[0]} </p>
             <p id="player-${users[i].id}-letter-1"> ${users[i].letters[1]} </p>
