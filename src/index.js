@@ -72,6 +72,11 @@ io.on("connection", (socket) => {
         room: user.room,
         users: getUsersInRoom(user.room),
       });
+
+      io.to(user.room).emit(
+        "generateNewPlayerSection",
+        getUsersInRoom(user.room)
+      );
     }
   });
 });
