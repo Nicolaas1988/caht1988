@@ -160,7 +160,6 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-content: center;
-  height: 90vh;
 }
 
 .name-container {
