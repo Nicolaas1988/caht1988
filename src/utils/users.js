@@ -82,6 +82,8 @@ const getPlayerTurn = () => {
 };
 
 const removeUser = (id, userRoom) => {
+  //Remove player from playerturn array
+
   const playerTurnIndex = playerTurns.room[`${userRoom}`].players.indexOf(id);
 
   if (playerTurnIndex !== -1) {

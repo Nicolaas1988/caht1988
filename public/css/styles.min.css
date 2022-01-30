@@ -14,15 +14,7 @@ body {
   color: #333;
   font-family: Helvetica, Arial, sans-serif;
 }
-h1 {
-  margin-bottom: 16px;
-}
-label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: #777;
-}
+
 input {
   border: 1px solid #eee;
   padding: 12px;
@@ -65,78 +57,41 @@ button:disabled {
   margin-bottom: 16px;
   width: 100%;
 }
-.chat {
-  /* display: flex; */
+
+.letter-section {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.main {
+  color: grey;
+}
+
+/* .player-section {
+  height: 40vh;
+  background-color: #282828;
+} */
+
+.player-arena-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.player-section {
   display: grid;
   grid-template-columns: 100%;
+  background-color: blue;
+  width: 20vw;
+  margin: 20px 20px;
 }
-.chat__sidebar {
-  height: 10vh;
-  color: #fff;
-  background: #282828;
-  overflow-y: scroll;
+
+.word-section {
+  display: grid;
+  grid-template-columns: 70% 15% 15%;
 }
-.chat__main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  max-height: 100vh;
-}
-.chat__messages {
-  flex-grow: 1;
-  padding: 24px 24px 0;
-  overflow-y: scroll;
-}
-.message {
-  margin-bottom: 16px;
-}
-.message__name {
-  font-weight: 600;
-  font-size: 14px;
-  margin-right: 8px;
-}
-.message__meta {
-  color: #777;
-  font-size: 14px;
-}
-.message a {
-  color: #0070cc;
-}
-.compose {
-  display: flex;
-  flex-shrink: 0;
-  margin-top: 16px;
-  padding: 24px;
-}
-.compose form {
-  display: flex;
-  flex-grow: 1;
-  margin-right: 16px;
-}
-.compose input {
-  border: 1px solid #eee;
+
+.word {
   width: 100%;
-  padding: 12px;
-  margin: 0 16px 0 0;
-  flex-grow: 1;
-}
-.compose button {
-  font-size: 14px;
-}
-.room-title {
-  font-weight: 400;
-  font-size: 22px;
-  background: #2c2f3a;
-  padding: 24px;
-}
-.list-title {
-  font-weight: 500;
-  font-size: 18px;
-  margin-bottom: 4px;
-  padding: 12px 24px 0;
-}
-.users {
-  list-style-type: none;
-  font-weight: 300;
-  padding: 12px 24px 0;
+  height: 30px;
 }

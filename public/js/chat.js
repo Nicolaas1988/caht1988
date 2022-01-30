@@ -1,122 +1,100 @@
 const socket = io();
 
-// Elements
-const $messageForm = document.querySelector("#message-form");
-const $messageFormInput = $messageForm.querySelector("input");
-const $messageFormButton = $messageForm.querySelector("button");
-const $sendLocationButton = document.querySelector("#send-location");
-const $messages = document.querySelector("#messages");
-
-// Templates
-const messageTemplate = document.querySelector("#message-template").innerHTML;
-const locationMessageTemplate = document.querySelector(
-  "#location-message-template"
-).innerHTML;
-const sidebarTemplate = document.querySelector("#sidebar-template").innerHTML;
+const playerArena = document.getElementById("player-arena");
 
 // query string
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
-const autoscroll = () => {
-  const $newMessage = $messages.lastElementChild;
-  const newMessageStyles = getComputedStyle($newMessage);
-  const newMessageMargin = parseInt(newMessageStyles.marginBottom);
-  const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
-  const visibleHeight = $messages.offsetHeight;
-  const containerHeight = $messages.scrollHeight;
-
-  // How far have I scrolled?
-  const scrollOffset = $messages.scrollTop + visibleHeight;
-
-  if (containerHeight - newMessageHeight <= scrollOffset) {
-    $messages.scrollTop = $messages.scrollHeight;
-  }
-};
-
-socket.on("message", (message) => {
-  console.log(message);
-  const html = Mustache.render(messageTemplate, {
-    username: message.username,
-    message: message.text,
-    createdAt: moment(message.createdAt).format("h:mm a"),
-    test: "this is a test curly",
-  });
-  $messages.insertAdjacentHTML("beforeend", html);
-  autoscroll();
-});
-
-socket.on("locationMessage", (message) => {
-  console.log(message);
-  const html = Mustache.render(locationMessageTemplate, {
-    username: message.username,
-    url: message.url,
-    createdAt: moment(message.createdAt).format("h:mm a"),
-  });
-  $messages.insertAdjacentHTML("beforeend", html);
-  autoscroll();
-});
-
-socket.on("roomData", ({ room, users }) => {
-  const html = Mustache.render(sidebarTemplate, {
-    room,
-    users,
-    test: "This is another test",
-  });
-  document.querySelector("#sidebar").innerHTML = html;
-
-  let myJSON2 = JSON.stringify(users); ///test
-  console.log(`Room: ${room}, users: ${myJSON2} `); ///test
-});
-
 socket.on("playerTurn", (data) => console.log(data));
-
-$messageForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  $messageFormButton.setAttribute("disabled", "disabled");
-
-  const message = e.target.elements.message.value;
-
-  socket.emit("sendMessage", message, (error) => {
-    $messageFormButton.removeAttribute("disabled");
-    $messageFormInput.value = "";
-    $messageFormInput.focus();
-
-    if (error) {
-      return console.log(error);
-    }
-
-    console.log("Message delivered!");
-  });
-});
-
-$sendLocationButton.addEventListener("click", () => {
-  if (!navigator.geolocation) {
-    return alert("Geolocation is not supported by your browser.");
-  }
-
-  $sendLocationButton.setAttribute("disabled", "disabled");
-
-  navigator.geolocation.getCurrentPosition((position) => {
-    socket.emit(
-      "sendLocation",
-      {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      },
-      () => {
-        $sendLocationButton.removeAttribute("disabled");
-        console.log("Location shared!");
-      }
-    );
-  });
-});
+socket.on("createPlayerSection", (data) =>
+  console.log(`This is the data that needs tobe rendered ${data}`)
+);
 
 socket.emit("join", { username, room }, (error) => {
   if (error) {
     alert(error);
     location.href = "/";
+  }
+});
+
+socket.on("generateNewPlayerSection", (users) => {
+  playerArena.innerHTML = "";
+  for (i = 0; i < users.length; i++) {
+    playerArena.insertAdjacentHTML(
+      "beforeend",
+      `
+    <div class="player-section" id="player-${users[i].id}-section">
+        <div class="letter-section" id="player-${users[i].id}-letters"> 
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[0]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[1]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[2]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[3]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[4]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[5]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[6]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[7]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[8]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[9]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[10]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[11]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[12]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[13]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[14]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[15]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[16]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[17]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[18]} </p>
+          <p id="player-${users[i].id}-letter-1"> ${users[i].letters[19]} </p>
+        
+        </div> 
+        <div class="word-section">
+            <input type="text" class="word" id="player-${users[i].id}-word-1">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-2">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-3">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-4">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-5">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-6">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-7">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-8">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-9">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+
+            <input type="text" class="word" id="player-${users[i].id}-word-10">
+            <div class="word-value"> 0 </div>
+            <div class="word-part-of-speech"> POS </div>
+            
+        
+        
+        </div>
+    </div>
+    `
+    );
   }
 });

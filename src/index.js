@@ -36,14 +36,13 @@ io.on("connection", (socket) => {
 
     socket.join(user.room);
 
-    socket.emit("message", generateMessage("Admin", "Welcome!"));
-
-    ///
+    io.to(user.room).emit(
+      "generateNewPlayerSection",
+      getUsersInRoom(user.room)
+    );
 
     const playerT = getPlayerTurn();
     io.to(user.room).emit("playerTurn", playerT);
-
-    ///
 
     socket.broadcast
       .to(user.room)
@@ -57,30 +56,6 @@ io.on("connection", (socket) => {
       users: getUsersInRoom(user.room),
     });
 
-    callback();
-  });
-
-  socket.on("sendMessage", (message, callback) => {
-    const user = getUser(socket.id);
-    const filter = new Filter();
-
-    if (filter.isProfane(message)) {
-      return callback("Profanity is not allowed!");
-    }
-
-    io.to(user.room).emit("message", generateMessage(user.username, message));
-    callback();
-  });
-
-  socket.on("sendLocation", (coords, callback) => {
-    const user = getUser(socket.id);
-    io.to(user.room).emit(
-      "locationMessage",
-      generateLocationMessage(
-        user.username,
-        `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
-      )
-    );
     callback();
   });
 
