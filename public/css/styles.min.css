@@ -1,3 +1,23 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Katibeh&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Modern+Antiqua&display=swap");
+
+:root {
+  --background-dark: #302320;
+  --background-light: #473834;
+
+  --gold-1: #e9b67e;
+  --gold-2: #ffd8ad;
+  --gold-3: #7a5334;
+
+  --dark-color-a: #282828;
+  --dark-color-b: #000000;
+  --light-color: #e6e9ff;
+  --success-color: #5cb85c;
+  --error-color: #d9534f;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +32,11 @@ input {
 body {
   line-height: 1.4;
   color: #333;
-  font-family: Helvetica, Arial, sans-serif;
+  /* font-family: Helvetica, Arial, sans-serif; */
+  background-image: url("../img/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
 }
 
 input {
@@ -23,7 +47,7 @@ input {
 button {
   cursor: pointer;
   padding: 12px;
-  background: #7c5cbf;
+  background: maroon;
   border: none;
   color: #fff;
   font-size: 16px;
@@ -36,8 +60,20 @@ button:disabled {
   cursor: default;
   background: #7c5cbf94;
 }
+
+.card {
+  display: flex;
+  justify-content: center;
+
+  background-image: url("../img/card.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 .centered-form {
-  background: #333744;
+  background-image: url("../img/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -49,6 +85,10 @@ button:disabled {
   background: #f7f7fa;
   padding: 24px;
   width: 250px;
+
+  /* font-family: "Katibeh", cursive;
+  font-weight: 300;
+  font-size: 20px; */
 }
 .centered-form button {
   width: 100%;
@@ -58,31 +98,100 @@ button:disabled {
   width: 100%;
 }
 
+.close {
+  width: 3rem;
+  height: 3rem;
+}
+
+.header-icons {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-bottom: 2px;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  background-image: url("../img/icon-container.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.header {
+  background-image: linear-gradient(
+    var(--background-dark),
+    var(--background-light),
+    var(--background-dark)
+  );
+  color: #fff;
+  /* border-top-left-radius: 5px;
+	border-top-right-radius: 5px; */
+  padding: 15px;
+  display: grid;
+  grid-template-columns: 50% auto auto auto auto auto;
+  font-family: "Alegreya Sans", sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--gold-1);
+  box-shadow: 0 3px 0 var(--gold-3);
+}
+
 .letter-section {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
+  font-family: "Alegreya Sans", sans-serif;
+  font-weight: 500;
+  justify-items: center;
+}
+
+.logo {
+  font-family: "Katibeh", cursive;
+  font-weight: 300;
+  font-size: 35px;
 }
 
 .main {
-  color: grey;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: 90vh;
 }
 
-/* .player-section {
-  height: 40vh;
-  background-color: #282828;
-} */
+.name-container {
+  display: flex;
+  background-image: url("../img/name-container.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-family: "Alegreya Sans", sans-serif;
+  min-height: 40px;
+  font-weight: 600;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-section {
+  border: solid 2px maroon;
+  border-radius: 5px;
+  padding: 10px;
+}
 
 .player-arena-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  align-self: center;
 }
 
 .player-section {
   display: grid;
   grid-template-columns: 100%;
-  background-color: blue;
-  width: 20vw;
+  /* width: 20vw; */
   margin: 20px 20px;
 }
 
