@@ -13,6 +13,7 @@ const {
   getUser,
   getUsersInRoom,
   getPlayerTurn,
+  checkChar,
 } = require("./utils/users");
 
 const app = express();
@@ -58,6 +59,27 @@ io.on("connection", (socket) => {
 
     callback();
   });
+
+  socket.on("checkCharReq", (key, lastChar) => {
+    let isCharAllowed = checkChar(key, lastChar, socket.id);
+    io.to(socket.id).emit("checkCharRes", isCharAllowed);
+  });
+
+  socket.on(
+    "updatePlayerArenaReq",
+    (wordValue, wordPosition, letterValue, letterPosition) => {
+      let user = getUser(socket.id);
+      socket
+        .to(user.room)
+        .emit(
+          "updatePlayerArenaRes",
+          wordValue,
+          wordPosition,
+          letterValue,
+          letterPosition
+        );
+    }
+  );
 
   socket.on("disconnect", () => {
     const room = getUser(socket.id).room;

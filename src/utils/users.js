@@ -114,10 +114,33 @@ const getUsersInRoom = (room) => {
   return users.filter((user) => user.room === room);
 };
 
+const checkChar = (key, lastChar, id) => {
+  let user = getUser(id);
+  if (key === "Backspace" || key === "Delete") {
+    let index = user.letters.indexOf("_");
+
+    if (index !== -1) {
+      if (lastChar !== "") {
+        user.letters[index] = lastChar;
+        return [id, index, lastChar];
+      }
+    }
+  }
+
+  if (user.letters.indexOf(key) === -1) {
+    return false;
+  } else {
+    let index = user.letters.indexOf(key);
+    user.letters[index] = "_";
+    return [id, index, "_"];
+  }
+};
+
 module.exports = {
   addUser,
   removeUser,
   getUser,
   getPlayerTurn,
   getUsersInRoom,
+  checkChar,
 };
