@@ -13,6 +13,7 @@ const {
   getUser,
   getUsersInRoom,
   getPlayerTurn,
+  updatePlayerTurn,
   checkChar,
 } = require("./utils/users");
 
@@ -40,10 +41,17 @@ io.on("connection", (socket) => {
     io.to(user.room).emit(
       "generateNewPlayerSection",
       getUsersInRoom(user.room)
+
+      // user.id
     );
 
-    const playerT = getPlayerTurn();
-    io.to(user.room).emit("playerTurn", playerT);
+    io.to(user.room).emit("disablePlayers");
+
+    const playerTurn = getPlayerTurn(user);
+
+    io.to(playerTurn).emit("enablePlayer", playerTurn);
+
+    // io.to(socket.id).emit("enablePlayerIfTurn", getPlayerTurn(), socket.id);
 
     socket.broadcast
       .to(user.room)
@@ -57,29 +65,39 @@ io.on("connection", (socket) => {
       users: getUsersInRoom(user.room),
     });
 
+    socket.on("checkCharReq", (previousWord, currentWord, diff, wordId) => {
+      const user = getUser(socket.id);
+      const lettersToUpdate = getUser(socket.id).letters;
+      let charChecked = checkChar(
+        previousWord,
+        currentWord,
+        diff,
+        lettersToUpdate
+      );
+      io.to(user.room).emit(
+        "checkCharRes",
+        charChecked,
+        socket.id,
+        previousWord,
+        currentWord,
+        wordId
+      );
+    });
+
+    socket.on("nextPlayer", () => {
+      const user = getUser(socket.id);
+      let playerTurn = updatePlayerTurn(user);
+      io.to(user.room).emit("nextPlayerRes", playerTurn);
+
+      ///
+      io.to(user.room).emit("disablePlayers");
+      io.to(playerTurn).emit("enablePlayer", playerTurn);
+
+      ///
+    });
+
     callback();
   });
-
-  socket.on("checkCharReq", (key, lastChar) => {
-    let isCharAllowed = checkChar(key, lastChar, socket.id);
-    io.to(socket.id).emit("checkCharRes", isCharAllowed);
-  });
-
-  socket.on(
-    "updatePlayerArenaReq",
-    (wordValue, wordPosition, letterValue, letterPosition) => {
-      let user = getUser(socket.id);
-      socket
-        .to(user.room)
-        .emit(
-          "updatePlayerArenaRes",
-          wordValue,
-          wordPosition,
-          letterValue,
-          letterPosition
-        );
-    }
-  );
 
   socket.on("disconnect", () => {
     const room = getUser(socket.id).room;

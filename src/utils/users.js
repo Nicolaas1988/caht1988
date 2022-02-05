@@ -77,8 +77,20 @@ const addUser = ({ id, username, room }) => {
   return { user };
 };
 
-const getPlayerTurn = () => {
-  return playerTurns;
+const getPlayerTurn = (user) => {
+  return playerTurns.room[`${user.room}`].turn;
+};
+
+const updatePlayerTurn = (user) => {
+  let room = playerTurns.room[`${user.room}`];
+  let index = room.players.indexOf(user.id) + 1;
+
+  if (index <= room.players.length - 1) {
+    room.turn = room.players[index];
+  } else {
+    room.turn = room.players[0];
+  }
+  return room.turn;
 };
 
 const removeUser = (id, userRoom) => {
@@ -114,25 +126,23 @@ const getUsersInRoom = (room) => {
   return users.filter((user) => user.room === room);
 };
 
-const checkChar = (key, lastChar, id) => {
-  let user = getUser(id);
-  if (key === "Backspace" || key === "Delete") {
-    let index = user.letters.indexOf("_");
+const checkChar = (previousWord, currentWord, diff, letters) => {
+  if (diff == "") {
+    let letterToRestore = previousWord.charAt(previousWord.length - 1);
+    let index = letters.indexOf("_");
+    letters[index] = letterToRestore;
 
-    if (index !== -1) {
-      if (lastChar !== "") {
-        user.letters[index] = lastChar;
-        return [id, index, lastChar];
-      }
-    }
+    return ["Backspace", index, letterToRestore];
   }
 
-  if (user.letters.indexOf(key) === -1) {
+  if (letters.includes(diff) === false && diff !== "") {
     return false;
-  } else {
-    let index = user.letters.indexOf(key);
-    user.letters[index] = "_";
-    return [id, index, "_"];
+  }
+
+  if (letters.includes(diff) === true) {
+    let index = letters.indexOf(diff);
+    letters[index] = "_";
+    return [true, index, diff];
   }
 };
 
@@ -141,6 +151,7 @@ module.exports = {
   removeUser,
   getUser,
   getPlayerTurn,
+  updatePlayerTurn,
   getUsersInRoom,
   checkChar,
 };

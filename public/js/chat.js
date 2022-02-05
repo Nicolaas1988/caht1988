@@ -1,21 +1,16 @@
 // const { response } = require("express");
+const nextPlayerBtn = document.getElementById("next-player-btn");
 
 const socket = io();
 
 const playerArena = document.getElementById("player-arena");
 let oldWordValue;
-let currentWord;
 let charAllowed;
 
 // query string
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
-
-socket.on("playerTurn", (data) => console.log(data));
-socket.on("createPlayerSection", (data) =>
-  console.log(`This is the data that needs tobe rendered ${data}`)
-);
 
 socket.emit("join", { username, room }, (error) => {
   if (error) {
@@ -56,7 +51,7 @@ socket.on("generateNewPlayerSection", (users) => {
             <p id="player-${users[i].id}-letter-19"> ${users[i].letters[19]} </p>
           
           </div> 
-          <div class="word-section">
+          <div id="player-${users[i].id}-word-section" class= "hasDisableOption word-section" >
               <input type="text" class="word" id="player-${users[i].id}-word-1">
               <div class="word-value" id="player-${users[i].id}-word-1-val"> 0 </div>
               <div class="word-part-of-speech"> POS </div>
@@ -108,56 +103,69 @@ socket.on("generateNewPlayerSection", (users) => {
 });
 
 //Word Input
-document.addEventListener("click", function (c) {
-  if (c.target.matches(".word")) {
-    oldWordValue = c.target.value;
+let previousWord = "";
+let currentWord;
+let wordId;
+
+document.addEventListener("beforeinput", function (bi) {
+  if (bi.target.matches(".word")) {
+    wordId = bi.target.id;
+    previousWord = bi.target.value;
+    console.log(`Previous Word is ${previousWord}`);
   }
 });
 
-document.addEventListener("keydown", function (kd) {
-  if (kd.target.matches(".word")) {
-    oldWordValue = kd.target.value;
-  }
+document.addEventListener("input", function (i) {
+  currentWord = i.target.value;
+  console.log(`Current input id ${i.target.id}`);
+
+  console.log(`Current Word is ${currentWord}`);
+
+  let diff = "";
+  currentWord.split("").forEach(function (val, i) {
+    if (val != previousWord.charAt(i)) diff += val;
+  });
+  console.log(`The difference is ${diff}`);
+
+  socket.emit("checkCharReq", previousWord, currentWord, diff, wordId);
 });
 
-document.addEventListener("keydown", function (k) {
-  if (k.target.matches(".word")) {
-    let word = k.target.value;
-    let lastChar = word.charAt(word.length - 1);
-    console.log(lastChar);
-
-    socket.emit("checkCharReq", k.key, lastChar);
-    currentWord = k.target.id;
+socket.on("checkCharRes", (charChecked, id, prevWord, curWord, wordId) => {
+  if (charChecked === false) {
+    document.getElementById(`${wordId}`).value = prevWord;
   }
-});
-
-socket.on("checkCharRes", (checked) => {
-  if (checked === false) {
-    document.getElementById(`${currentWord}`).value = oldWordValue;
-  } else {
+  if (charChecked[0] === true) {
+    document.getElementById(`${wordId}`).value = curWord;
     document.getElementById(
-      `player-${checked[0]}-letter-${checked[1]}`
-    ).textContent = checked[2];
+      `player-${id}-letter-${charChecked[1]}`
+    ).textContent = "_";
+    //
+  }
 
-    let wordValue = document.getElementById(`${currentWord}`).value;
-    let wordPosition = currentWord;
-    let letterPosition = `player-${checked[0]}-letter-${checked[1]}`;
-    let letterValue = checked[2];
-
-    socket.emit(
-      "updatePlayerArenaReq",
-      wordValue,
-      wordPosition,
-      letterValue,
-      letterPosition
-    );
+  if (charChecked[0] === "Backspace") {
+    document.getElementById(`${wordId}`).value = curWord;
+    document.getElementById(
+      `player-${id}-letter-${charChecked[1]}`
+    ).textContent = charChecked[2];
   }
 });
 
-socket.on(
-  "updatePlayerArenaRes",
-  (wordValue, wordPosition, letterValue, letterPosition) => {
-    document.getElementById(`${wordPosition}`).value = wordValue;
-    document.getElementById(`${letterPosition}`).textContent = letterValue;
-  }
-);
+socket.on("nextPlayerRes", (turn) => {
+  console.log(`Next player is ${turn}`);
+});
+
+nextPlayerBtn.addEventListener("click", () => {
+  socket.emit("nextPlayer");
+});
+
+socket.on("disablePlayers", () => {
+  let elementsToDisable = document.querySelectorAll(".hasDisableOption");
+  elementsToDisable.forEach((el) => el.classList.add("disable-area"));
+});
+
+socket.on("enablePlayer", (id) => {
+  console.log("ONly one person should receive this message on tunr");
+  document
+    .getElementById(`player-${id}-word-section`)
+    .classList.remove("disable-area");
+});
