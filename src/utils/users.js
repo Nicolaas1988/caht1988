@@ -3,6 +3,10 @@ const playerTurns = {
   room: {},
 };
 
+const fullUsers = () => {
+  return users;
+};
+
 const addUser = ({ id, username, room }) => {
   username = username.trim().toLowerCase();
   room = room.trim().toLowerCase();
@@ -93,23 +97,7 @@ const updatePlayerTurn = (user) => {
   return room.turn;
 };
 
-const removeUser = (id, userRoom) => {
-  //Remove player from playerturn array
-
-  const playerTurnIndex = playerTurns.room[`${userRoom}`].players.indexOf(id);
-
-  if (playerTurnIndex !== -1) {
-    playerTurns.room[`${userRoom}`].players.splice(playerTurnIndex, 1);
-  }
-
-  //Reinitialize room to default if all users left
-
-  if (playerTurns.room[`${userRoom}`].players.length === 0) {
-    delete playerTurns.room[`${userRoom}`];
-  }
-
-  //
-
+const removeUser = (id) => {
   const index = users.findIndex((user) => user.id === id);
 
   if (index !== -1) {
@@ -149,6 +137,7 @@ const checkChar = (previousWord, currentWord, diff, letters) => {
 module.exports = {
   addUser,
   removeUser,
+  fullUsers,
   getUser,
   getPlayerTurn,
   updatePlayerTurn,

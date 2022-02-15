@@ -19,13 +19,17 @@ socket.emit("join", { username, room }, (error) => {
   }
 });
 
+socket.on("test", (users) => {
+  console.log(users);
+});
+
 socket.on("generateNewPlayerSection", (users) => {
   playerArena.innerHTML = "";
   for (i = 0; i < users.length; i++) {
     playerArena.insertAdjacentHTML(
       "beforeend",
       `
-    <div class="card">
+    <div class="card" id="player-${users[i].id}-card">
       <div class="player-section" id="player-${users[i].id}-section">
           <div class="name-container"> ${users[i].username}</div>
           <div class="letter-section" id="player-${users[i].id}-letters"> 
@@ -168,4 +172,12 @@ socket.on("enablePlayer", (id) => {
   document
     .getElementById(`player-${id}-word-section`)
     .classList.remove("disable-area");
+});
+
+socket.on("removePlayerSection", (id) => {
+  let playerToRemove = document.getElementById(`${id}`);
+
+  if (playerToRemove) {
+    playerToRemove.remove();
+  }
 });

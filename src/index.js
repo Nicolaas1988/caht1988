@@ -10,6 +10,7 @@ const {
 const {
   addUser,
   removeUser,
+  fullUsers,
   getUser,
   getUsersInRoom,
   getPlayerTurn,
@@ -37,6 +38,8 @@ io.on("connection", (socket) => {
     }
 
     socket.join(user.room);
+
+    io.to(socket.id).emit("test", fullUsers());
 
     io.to(user.room).emit(
       "generateNewPlayerSection",
@@ -100,14 +103,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    const room = getUser(socket.id).room;
-    const user = removeUser(socket.id, room);
+    // const room = getUser(socket.id).room;
+    const user = removeUser(socket.id);
+
+    io.emit("removePlayerSection", socket.id);
 
     if (user) {
-      // io.to(user.room).emit(
-      //   "message",
-      //   generateMessage("Admin", `${user.username} has left!`)
-      // );
       io.to(user.room).emit("roomData", {
         room: user.room,
         users: getUsersInRoom(user.room),
